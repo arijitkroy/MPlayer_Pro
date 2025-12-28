@@ -5,6 +5,7 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { MdPlaylistAdd } from "react-icons/md";
 import toast from "react-hot-toast";
 import PlaylistModal from "./PlaylistModal";
+import Image from "next/image";
 
 export default function TrackCard({ track, tracks, index }) {
   const { playTrack, track: current, isPlaying } = usePlayer();
@@ -47,10 +48,18 @@ export default function TrackCard({ track, tracks, index }) {
       hover:bg-[#222222]/80 hover:shadow-[0_0_40px_rgba(0,0,0,0.6)] hover:scale-[1.02]"
     >
       <div className="relative">
-        <img
-          src={track.album_image || track.image || "/music.png"}
-          className="rounded w-full h-32 sm:h-40 md:h-44 object-cover"
-        />
+        <div className="relative w-full h-44">
+          <Image
+            src={track.album_image || track.image || "/music.png"}
+            alt={track.name}
+            fill
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAA..."
+            className="object-cover rounded"
+            loading="lazy"
+            sizes="(max-width: 768px) 50vw, 25vw"
+          />
+        </div>
 
         <button
           onClick={(e) => {
