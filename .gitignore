@@ -1,5 +1,12 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+.gradle
+/app
+app-release-bundle.aab 
+app-release-signed.apk 
+app-release-signed.apk.idsig 
+app-release-unsigned-aligned.apk
+
 .next
 # dependencies
 /node_modules
