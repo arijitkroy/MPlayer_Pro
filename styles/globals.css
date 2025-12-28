@@ -5,22 +5,26 @@
   --foreground: #171717;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--foreground);
+  color: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.animate-scale {
+  animation: pop .25s ease-in-out;
+}
+
+@keyframes pop {
+  0% { transform: scale(.7); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes eq1 {0%{height:6px}50%{height:20px}100%{height:8px}}
+@keyframes eq2 {0%{height:10px}50%{height:25px}100%{height:8px}}
+@keyframes eq3 {0%{height:5px}50%{height:18px}100%{height:10px}}
+
+.animate-eq1{animation:eq1 .6s infinite ease-in-out}
+.animate-eq2{animation:eq2 .6s infinite ease-in-out .2s}
+.animate-eq3{animation:eq3 .6s infinite ease-in-out .4s}

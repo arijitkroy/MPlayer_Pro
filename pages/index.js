@@ -1,78 +1,131 @@
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import { useState, useEffect } from "react";
+import Layout from "../components/Layout";
+import { usePlayer } from "../context/PlayerContext";
+import useFavorites from "../hooks/useFavorites";
+import TrackCard from "../components/TrackCard";
 
 export default function Home() {
+  const [tracks, setTracks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
+
+  const { playTrack, track: current } = usePlayer();
+  const { addFavorite, removeFavorite, getFavorites } = useFavorites();
+  const [favoriteIds, setFavoriteIds] = useState([]);
+
+  // Load Favorites
+  const loadFavorites = async () => {
+    const favs = await getFavorites();
+    setFavoriteIds(favs.map(f => f.id));
+  };
+
+  // SEARCH
+  const searchMusic = async (query) => {
+    if (!query.trim()) return setTracks([]);
+    setLoading(true);
+
+    const res = await fetch(`/api/music?q=${query}`);
+    const data = await res.json();
+
+    setTracks(data || []);
+    setLoading(false);
+  };
+
+  // RANDOM HOME RECOMMEND
+  const fetchRandomMusic = async (reset = true) => {
+    if (reset) setLoading(true);
+
+    const res = await fetch(
+      `/api/music?q=random_home&page=${reset ? 0 : page}&t=${Date.now()}`
+    );
+    const data = await res.json();
+
+    setTracks(reset ? (data || []) : [...tracks, ...data]);
+    setLoading(false);
+  };
+
+  // Infinite Scroll
+  const loadMoreTracks = async () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchRandomMusic(false);
+  };
+
+  useEffect(() => {
+    fetchRandomMusic();
+    loadFavorites();
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - 600
+      ) {
+        loadMoreTracks();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  });
+
   return (
-    <div
-      className={`${geistSans.className} ${geistMono.className} flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black`}
-    >
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the index.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <Layout onSearch={searchMusic} onHomeClick={() => fetchRandomMusic(true)}>
+      {/* Section Header */}
+      <div className="mb-6">
+        <h2 className="text-3xl font-bold text-white">
+          Recommended for you
+        </h2>
+        <p className="text-gray-400 mt-1">
+          Fresh picks — handpicked vibes curated just for your mood 🎧
+        </p>
+      </div>
+
+      {/* Skeleton Loader */}
+      {loading && (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-6">
+          {[...Array(12)].map((_, i) => (
+            <div
+              key={i}
+              className="animate-pulse bg-[#1b1b1b]/70 border border-white/10 rounded-xl p-4
+              shadow-[0_0_20px_rgba(0,0,0,0.4)]"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              <div className="bg-[#2d2d2d] h-44 rounded mb-3"></div>
+              <div className="h-4 bg-[#2d2d2d] rounded mb-2"></div>
+              <div className="h-3 bg-[#2d2d2d] rounded w-2/3"></div>
+            </div>
+          ))}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+      )}
+
+      {/* Empty State */}
+      {!loading && tracks.length === 0 && (
+        <div className="flex flex-col items-center justify-center mt-20 text-gray-400">
+          <div className="text-6xl mb-3">😶‍🌫️</div>
+          <p className="text-lg">Nothing to show… Try searching something</p>
+
+          <div className="mt-3 px-4 py-2 bg-[#222]/50 border border-white/10 rounded-full text-sm text-gray-300">
+            Tip: Try “lofi”, “rock”, “anime”, “edm” 🎵
+          </div>
+        </div>
+      )}
+
+      {/* Tracks */}
+      <div
+        className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6
+        gap-6 pb-10"
+      >
+        {!loading &&
+          tracks.map((track, index) => (
+            <TrackCard
+              key={track.id}
+              track={track}
+              tracks={tracks}
+              index={index}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs/pages/getting-started?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+          ))}
+      </div>
+    </Layout>
   );
 }
