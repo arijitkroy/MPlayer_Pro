@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 .gradle
-/app
+/app/build
 app-release-bundle.aab 
 app-release-signed.apk 
 app-release-signed.apk.idsig 
