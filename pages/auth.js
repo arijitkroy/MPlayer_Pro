@@ -12,7 +12,7 @@ export default function Auth() {
 
   return (
     <div className="h-screen bg-black text-white flex justify-center items-center">
-      <div className="bg-[#111] p-8 rounded-xl border border-gray-700 w-[400px] text-center">
+      <div className="bg-[#111] p-8 rounded-xl border border-gray-700 w-100 text-center">
         <h2 className="text-2xl font-bold mb-6">Sign in to MPlayer Pro</h2>
 
         <button

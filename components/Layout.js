@@ -13,8 +13,6 @@ export default function Layout({ children, onSearch, onHomeClick }) {
 
   return (
     <div className="h-screen bg-black text-gray-200 flex">
-
-      {/* Sidebar */}
       <aside className="w-64 bg-black border-r border-gray-800 p-6 hidden sm:flex flex-col gap-6">
         <h1 className="text-2xl font-bold text-white">MPlayer Pro</h1>
 
@@ -33,11 +31,8 @@ export default function Layout({ children, onSearch, onHomeClick }) {
         </nav>
       </aside>
 
-      {/* Main */}
       <main className="flex-1 flex flex-col">
-
-        {/* Header */}
-        <header className="p-4 bg-gradient-to-b from-[#121212] to-transparent border-b border-gray-800 flex justify-between items-center">
+        <header className="p-4 bg-linear-to-b from-[#121212] to-transparent border-b border-gray-800 flex justify-between items-center">
           <input
             placeholder="Search for songs…"
             className="bg-[#1f1f1f] text-white px-4 py-2 rounded-full outline-none w-1/2"
@@ -60,8 +55,7 @@ export default function Layout({ children, onSearch, onHomeClick }) {
             </Link>
             )}
         </header>
-
-        {/* Content */}
+        
         <div className="p-6 overflow-y-auto">
           {children}
         </div>

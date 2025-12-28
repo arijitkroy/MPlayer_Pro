@@ -8,7 +8,6 @@ export default async function handler(req, res) {
   let url;
 
   if (q === "random_home") {
-    // Popular tracks = always returns data
     url = `${base}&order=popularity_total`;
   } else {
     url = `${base}&fuzzysearch=1&search=${encodeURIComponent(q)}`;

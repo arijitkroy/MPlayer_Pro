@@ -29,21 +29,17 @@ export default function MobileNowPlaying({ open, onClose }) {
     return `${m}:${s}`;
   };
 
-  // volume sync
   if (audioRef?.current) {
     audioRef.current.volume = volume / 100;
   }
 
   return (
-    <div className="fixed inset-0 bg-black z-[9999] flex flex-col">
-
-      {/* ---------- TOP BAR ---------- */}
+    <div className="fixed inset-0 bg-black z-9999 flex flex-col">
       <div className="p-4 flex justify-between items-center">
         <span className="text-gray-400 text-sm">Now Playing</span>
         <button onClick={onClose} className="text-gray-400 text-xl">✖</button>
       </div>
 
-      {/* ---------- ARTWORK ---------- */}
       <div className="flex justify-center mt-6">
         <img
           src={track.album_image || "/music.png"}
@@ -51,14 +47,11 @@ export default function MobileNowPlaying({ open, onClose }) {
         />
       </div>
 
-      {/* ---------- SONG INFO ---------- */}
       <div className="mt-6 text-center px-6">
         <h2 className="text-white text-xl font-bold truncate">{track.name}</h2>
         <p className="text-gray-400">{track.artist_name}</p>
       </div>
 
-
-      {/* ---------- SEEK BAR FULL WIDTH ---------- */}
       <div className="px-6 mt-6">
         <input
           type="range"
@@ -77,8 +70,6 @@ export default function MobileNowPlaying({ open, onClose }) {
         </div>
       </div>
 
-
-      {/* ---------- CONTROLS ---------- */}
       <div className="mt-8 flex justify-center gap-8 text-3xl">
         <button onClick={() => setShuffle(!shuffle)} className={shuffle ? "text-green-400" : "text-white"}>
           <FaRandom />
@@ -104,8 +95,6 @@ export default function MobileNowPlaying({ open, onClose }) {
         </button>
       </div>
 
-
-      {/* ---------- VOLUME ---------- */}
       <div className="mt-8 px-10 flex items-center justify-center gap-4 text-white">
         <FaVolumeUp />
         <input

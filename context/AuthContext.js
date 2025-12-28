@@ -12,21 +12,16 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user,setUser] = useState(null);
   const [loading,setLoading] = useState(true);
-
-  // Google Provider
   const provider = new GoogleAuthProvider();
 
-  // Login
   const loginWithGoogle = async () => {
     await signInWithPopup(auth, provider);
   };
 
-  // Logout
   const logout = async () => {
     await signOut(auth);
   };
 
-  // Listen for auth state
   useEffect(() => {
     return onAuthStateChanged(auth,(u)=>{
       setUser(u || null);

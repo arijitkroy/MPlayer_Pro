@@ -32,7 +32,6 @@ export default function PlaylistModal({ track, onClose }) {
 
     if (!p) return;
 
-    // 🔥 Prevent duplicate track
     const alreadyExists = (p.tracks || []).some(t => t.id === track.id);
     if (alreadyExists) {
         toast.error("Track already in this playlist");
@@ -56,7 +55,6 @@ export default function PlaylistModal({ track, onClose }) {
 
     const exists = list.find(p => p.name === name);
 
-    // If playlist exists and track already inside → stop
     if (exists) {
         const already = (exists.tracks || []).some(t => t.id === track.id);
         if (already) {
@@ -79,14 +77,13 @@ export default function PlaylistModal({ track, onClose }) {
   if (!mounted) return null;
 
   return createPortal(
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex justify-center items-center z-[9999]">
-      <div className="bg-[#121212] border border-white/10 rounded-2xl p-6 w-[420px]">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex justify-center items-center z-9999">
+      <div className="bg-[#121212] border border-white/10 rounded-2xl p-6 w-105">
 
         <h2 className="text-xl font-bold mb-3 text-white">
           Add to Playlist
         </h2>
 
-        {/* Existing Playlists */}
         <div className="max-h-56 overflow-y-auto mb-4">
           {playlists.length === 0 && (
             <div className="text-gray-400 text-sm">
@@ -106,7 +103,6 @@ export default function PlaylistModal({ track, onClose }) {
           ))}
         </div>
 
-        {/* Create Playlist */}
         <div className="flex gap-2 mb-4">
           <input
             className="bg-[#1f1f1f] px-3 py-2 rounded w-full outline-none text-white"
@@ -123,7 +119,6 @@ export default function PlaylistModal({ track, onClose }) {
           </button>
         </div>
 
-        {/* Close */}
         <button
           className="w-full bg-red-500 py-2 rounded"
           onClick={onClose}

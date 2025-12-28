@@ -2,6 +2,7 @@ import { usePlayer } from "../context/PlayerContext";
 import useFavorites from "../hooks/useFavorites";
 import { useState, useEffect } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { MdPlaylistAdd } from "react-icons/md";
 import toast from "react-hot-toast";
 import PlaylistModal from "./PlaylistModal";
 
@@ -51,7 +52,6 @@ export default function TrackCard({ track, tracks, index }) {
           className="rounded w-full h-32 sm:h-40 md:h-44 object-cover"
         />
 
-        {/* Floating Play Button */}
         <button
           onClick={(e) => {
             e.stopPropagation();
@@ -79,7 +79,6 @@ export default function TrackCard({ track, tracks, index }) {
             ▶
         </button>
 
-        {/* Equalizer Animation */}
         {current?.id === track.id && isPlaying && (
           <div className="absolute bottom-3 left-3 flex gap-0.75">
             <span className="w-1 h-4 bg-green-500 animate-eq1"></span>
@@ -97,39 +96,44 @@ export default function TrackCard({ track, tracks, index }) {
         {track.artist_name}
       </div>
 
-      {/* Favorite Button */}
-      <button
-        onClick={toggleFavorite}
-        className={`mt-3 flex items-center gap-2 transition 
-          ${favoriteIds.includes(track.id)
-            ? "text-green-400 drop-shadow-[0_0_6px_#22c55e]"
-            : "text-gray-400 hover:text-pink-500"}
-          ${favLoading ? "opacity-50 cursor-not-allowed" : ""}
-        `}
-        title={
-          favoriteIds.includes(track.id)
-            ? "Remove from Favorites"
-            : "Add to Favorites"
-        }
-      >
-        {favLoading ? (
-          <span className="h-4 w-4 border-2 border-t-transparent rounded-full animate-spin"></span>
-        ) : favoriteIds.includes(track.id) ? (
-          <FaHeart className="animate-scale" />
-        ) : (
-          <FaRegHeart />
-        )}
-      </button>
+        <div className="mt-3 flex justify-between items-center gap-4">
+            <button
+                onClick={toggleFavorite}
+                className={`flex items-center gap-2 transition 
+                ${favoriteIds.includes(track.id)
+                    ? "text-green-400 drop-shadow-[0_0_6px_#22c55e]"
+                    : "text-gray-400 hover:text-pink-500"}
+                ${favLoading ? "opacity-50 cursor-not-allowed" : ""}
+                `}
+                title={
+                favoriteIds.includes(track.id)
+                    ? "Remove from Favorites"
+                    : "Add to Favorites"
+                }
+            >
+                {favLoading ? (
+                <span className="h-4 w-4 border-2 border-t-transparent rounded-full animate-spin"></span>
+                ) : favoriteIds.includes(track.id) ? (
+                <FaHeart className="animate-scale" />
+                ) : (
+                <FaRegHeart />
+                )}
+            </button>
 
-        <button
-        onClick={(e) => {
-            e.stopPropagation();
-            setShowPlaylistModal(true);
-        }}
-        className="mt-2 text-gray-300 hover:text-green-400"
-        >
-        ➕ Add to Playlist
-        </button>
+            <button
+                onClick={(e) => {
+                e.stopPropagation();
+                setShowPlaylistModal(true);
+                }}
+                className="inline-flex items-center gap-2 whitespace-nowrap 
+                        text-gray-300 hover:text-green-400 hover:scale-105
+                        transition duration-200"
+            >
+                <MdPlaylistAdd size={22} className="drop-shadow-sm" />
+                <span className="text-sm">Add to Playlist</span>
+            </button>
+
+            </div>
 
         {showPlaylistModal && (
         <PlaylistModal

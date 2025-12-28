@@ -11,7 +11,7 @@ export default function MiniPlayer({ onExpand }) {
       fixed bottom-16 left-0 right-0 sm:hidden
       bg-[#181818] border-t border-white/10
       h-14 flex items-center px-3 gap-3
-      z-[999]
+      z-999
       "
       onClick={onExpand}
     >

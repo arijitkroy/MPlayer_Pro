@@ -28,7 +28,6 @@ export default function PlayerBar() {
     return `${m}:${s}`;
   };
 
-  // Load / change track
   useEffect(() => {
     if (audioRef.current && track) {
       audioRef.current.src = track.audio;
@@ -37,7 +36,6 @@ export default function PlayerBar() {
     }
   }, [track]);
 
-  // Volume binding
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume / 100;
@@ -48,11 +46,8 @@ export default function PlayerBar() {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-gray-900 text-white border-t border-gray-700 px-6 py-2">
-
-      {/* ---------- ROW 1 : Info + Controls + Volume ---------- */}
       <div className="flex items-center justify-between gap-4">
 
-        {/* Track Info */}
         <div className="flex items-center gap-3 w-[30%]">
           <img
             src={track.album_image || "/music.png"}
@@ -65,7 +60,6 @@ export default function PlayerBar() {
           </div>
         </div>
 
-        {/* Controls */}
         <div className="flex items-center gap-4 justify-center w-[40%] text-lg">
           <button onClick={() => setShuffle(!shuffle)} className={shuffle ? "text-green-400" : ""}>
             <FaRandom />
@@ -91,7 +85,6 @@ export default function PlayerBar() {
           </button>
         </div>
 
-        {/* Volume */}
         <div className="flex items-center gap-2 w-[30%] justify-end">
           <FaVolumeUp />
           <input
@@ -105,7 +98,6 @@ export default function PlayerBar() {
         </div>
       </div>
 
-      {/* ---------- ROW 2 : Full Width Seek Bar ---------- */}
       <div className="mt-1 px-2">
         <div className="flex justify-between gap-2 text-gray-400 text-sm mt-1">
           <span>{format(progress)}</span>

@@ -66,7 +66,6 @@ export default function Playlists() {
 
   return (
     <Layout>
-      {/* Header */}
       <div className="mb-6">
         <h2 className="text-3xl font-bold text-white">Your Playlists</h2>
         <p className="text-gray-400 mt-1">
@@ -74,7 +73,6 @@ export default function Playlists() {
         </p>
       </div>
 
-      {/* Create Playlist UI */}
       <div className="flex gap-3 mb-6">
         <input
           className="bg-[#1f1f1f] px-3 py-2 rounded outline-none border border-white/10 text-white w-full sm:w-72"
@@ -91,7 +89,6 @@ export default function Playlists() {
         </button>
       </div>
 
-      {/* Loading Skeleton */}
       {loading && (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-6">
           {[...Array(8)].map((_, i) => (
@@ -104,7 +101,6 @@ export default function Playlists() {
         </div>
       )}
 
-      {/* Empty State */}
       {!loading && playlists.length === 0 && (
         <div className="flex flex-col items-center justify-center mt-20 text-gray-400">
           <div className="text-6xl mb-3">📂</div>
@@ -115,7 +111,6 @@ export default function Playlists() {
         </div>
       )}
 
-      {/* Playlist Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-6">
         {playlists.map((playlist) => (
           <div
@@ -125,8 +120,7 @@ export default function Playlists() {
           >
             <Link href={`/playlist/${playlist.name}`}>
               <div>
-                {/* Playlist Cover */}
-                <div className="h-40 w-full rounded bg-gradient-to-br from-green-600 to-green-900 flex items-center justify-center text-4xl">
+                <div className="h-40 w-full rounded bg-linear-to-br from-green-600 to-green-900 flex items-center justify-center text-4xl">
                   🎵
                 </div>
 
@@ -140,7 +134,6 @@ export default function Playlists() {
               </div>
             </Link>
 
-            {/* Hover Play Button */}
             {playlist.tracks?.length > 0 && (
               <button
                 onClick={() => playTrack(playlist.tracks, 0)}
@@ -152,7 +145,6 @@ export default function Playlists() {
               </button>
             )}
 
-            {/* Delete Button */}
             <button
               onClick={() => deletePlaylist(playlist)}
               className="absolute top-3 right-3 text-gray-300 hover:text-red-400 text-lg"

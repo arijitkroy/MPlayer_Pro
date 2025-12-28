@@ -13,9 +13,8 @@ function AuthGate({ children }) {
   const { user, loading } = useAuth();
   const router = useRouter();
 
-  const PUBLIC_ROUTES = ["/auth"];   // only page allowed without login
+  const PUBLIC_ROUTES = ["/auth"];
 
-  // Wait while Firebase restores session
   if (loading) {
     return (
       <div className="h-screen bg-black text-white flex items-center justify-center">
@@ -24,7 +23,6 @@ function AuthGate({ children }) {
     );
   }
 
-  // If not logged in → send to auth page
   if (!user && !PUBLIC_ROUTES.includes(router.pathname)) {
     router.push("/auth");
     return (

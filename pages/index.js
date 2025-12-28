@@ -13,13 +13,11 @@ export default function Home() {
   const { addFavorite, removeFavorite, getFavorites } = useFavorites();
   const [favoriteIds, setFavoriteIds] = useState([]);
 
-  // Load Favorites
   const loadFavorites = async () => {
     const favs = await getFavorites();
     setFavoriteIds(favs.map(f => f.id));
   };
 
-  // SEARCH
   const searchMusic = async (query) => {
     if (!query.trim()) return setTracks([]);
     setLoading(true);
@@ -31,7 +29,6 @@ export default function Home() {
     setLoading(false);
   };
 
-  // RANDOM HOME RECOMMEND
   const fetchRandomMusic = async (reset = true) => {
     if (reset) setLoading(true);
 
@@ -44,7 +41,6 @@ export default function Home() {
     setLoading(false);
   };
 
-  // Infinite Scroll
   const loadMoreTracks = async () => {
     const nextPage = page + 1;
     setPage(nextPage);
@@ -72,7 +68,6 @@ export default function Home() {
 
   return (
     <Layout onSearch={searchMusic} onHomeClick={() => fetchRandomMusic(true)}>
-      {/* Section Header */}
       <div className="mb-6">
         <h2 className="text-3xl font-bold text-white">
           Recommended for you
@@ -82,7 +77,6 @@ export default function Home() {
         </p>
       </div>
 
-      {/* Skeleton Loader */}
       {loading && (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-6">
           {[...Array(12)].map((_, i) => (
@@ -99,7 +93,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* Empty State */}
       {!loading && tracks.length === 0 && (
         <div className="flex flex-col items-center justify-center mt-20 text-gray-400">
           <div className="text-6xl mb-3">😶‍🌫️</div>
@@ -111,7 +104,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* Tracks */}
       <div
         className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6
         gap-6 pb-10"

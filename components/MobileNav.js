@@ -21,7 +21,7 @@ export default function MobileNav() {
       bg-[#101010]/95 backdrop-blur-md
       border-t border-white/10
       h-16 flex justify-around items-center
-      sm:hidden z-[999]
+      sm:hidden z-999
     ">
       {tab("/", "Home", "🏠")}
       {tab("/favorites", "Favorites", "❤️")}

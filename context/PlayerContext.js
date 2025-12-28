@@ -8,22 +8,17 @@ export const PlayerProvider = ({ children }) => {
   const [track, setTrack] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // Real playback states (seconds)
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
 
-  // Queue
   const [queue, setQueue] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Features
   const [shuffle, setShuffle] = useState(false);
   const [repeat, setRepeat] = useState(false);
 
-  // Scrub lock (prevents jitter while dragging)
   const [isScrubbing, setIsScrubbing] = useState(false);
 
-  // ---------------- LISTENERS ----------------
   useEffect(() => {
     if (!audioRef.current) return;
     const audio = audioRef.current;
@@ -48,7 +43,6 @@ export const PlayerProvider = ({ children }) => {
   }, [audioRef, queue, currentIndex, repeat, shuffle, isScrubbing]);
 
 
-  // ---------------- CONTROLS ----------------
   const playTrack = (songList, index = 0) => {
     if (!songList || !songList.length) return;
 
@@ -73,7 +67,6 @@ export const PlayerProvider = ({ children }) => {
       return;
     }
 
-    // last song
     if (currentIndex + 1 >= queue.length) {
       if (repeat) {
         setCurrentIndex(0);
@@ -113,29 +106,23 @@ export const PlayerProvider = ({ children }) => {
     }
   };
 
-
-  // ---------------- SEEKING ----------------
   const seek = (input) => {
     if (!audioRef.current || !duration) return;
 
     let seconds;
 
-    // Desktop range sends event
     if (input?.target) {
       const value = Number(input.target.value);
       const max = Number(input.target.max || 100);
 
-      // Percent based slider
       if (max === 100) {
         seconds = (duration * value) / 100;
       }
-      // Direct seconds range
       else {
         seconds = value;
       }
     }
 
-    // Mobile sends number directly
     else {
       seconds = Number(input);
     }
@@ -148,9 +135,7 @@ export const PlayerProvider = ({ children }) => {
     setProgress(seconds);
   };
 
-  // Desktop helper
   const progressPercent = duration ? (progress / duration) * 100 : 0;
-
 
   return (
     <PlayerContext.Provider
