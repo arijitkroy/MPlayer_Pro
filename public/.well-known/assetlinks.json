@@ -2,8 +2,8 @@
   {
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
-      "namespace": "<Name_Of_The_App",
-      "package_name": "<com.example.app>",
+      "namespace": "Music_Player_Pro",
+      "package_name": "app.vercel.m_player_pro.twa",
       "sha256_cert_fingerprints": [
         "47:CC:1B:69:5E:82:9B:9E:C9:76:F1:A9:81:42:D3:0D:FE:21:63:BB:77:65:1D:AF:C4:9F:6B:BC:32:AD:88:3E"
       ]
