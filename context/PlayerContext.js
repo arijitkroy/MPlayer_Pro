@@ -1,4 +1,4 @@
-import { createContext, useContext, useRef, useState } from "react";
+import { createContext, useContext, useRef, useState, useEffect } from "react";
 
 const PlayerContext = createContext(null);
 
@@ -7,47 +7,98 @@ export const PlayerProvider = ({ children }) => {
 
   const [track, setTrack] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
+
+  // Real playback states (seconds)
   const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
+
+  // Queue
   const [queue, setQueue] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Features
   const [shuffle, setShuffle] = useState(false);
   const [repeat, setRepeat] = useState(false);
 
+  // Scrub lock (prevents jitter while dragging)
+  const [isScrubbing, setIsScrubbing] = useState(false);
+
+  // ---------------- LISTENERS ----------------
+  useEffect(() => {
+    if (!audioRef.current) return;
+    const audio = audioRef.current;
+
+    const updateProgress = () => {
+      if (!isScrubbing) setProgress(audio.currentTime);
+    };
+
+    const loadMeta = () => setDuration(audio.duration || 0);
+
+    const onEnded = () => nextTrack();
+
+    audio.addEventListener("timeupdate", updateProgress);
+    audio.addEventListener("loadedmetadata", loadMeta);
+    audio.addEventListener("ended", onEnded);
+
+    return () => {
+      audio.removeEventListener("timeupdate", updateProgress);
+      audio.removeEventListener("loadedmetadata", loadMeta);
+      audio.removeEventListener("ended", onEnded);
+    };
+  }, [audioRef, queue, currentIndex, repeat, shuffle, isScrubbing]);
+
+
+  // ---------------- CONTROLS ----------------
   const playTrack = (songList, index = 0) => {
+    if (!songList || !songList.length) return;
+
     setQueue(songList);
     setCurrentIndex(index);
     setTrack(songList[index]);
     setIsPlaying(true);
-};
 
-    const nextTrack = () => {
-        if (shuffle) {
-            const randomIndex = Math.floor(Math.random() * queue.length);
-            setCurrentIndex(randomIndex);
-            setTrack(queue[randomIndex]);
-            return;
-        }
+    setTimeout(() => {
+      if (audioRef.current) audioRef.current.play();
+    }, 100);
+  };
 
-        if (currentIndex + 1 >= queue.length) {
-            if (repeat) {
-            setCurrentIndex(0);
-            setTrack(queue[0]);
-            }
-            return;
-        }
+  const nextTrack = () => {
+    if (!queue.length) return;
 
-        const newIndex = currentIndex + 1;
-        setCurrentIndex(newIndex);
-        setTrack(queue[newIndex]);
-    };
+    if (shuffle) {
+      const r = Math.floor(Math.random() * queue.length);
+      setCurrentIndex(r);
+      setTrack(queue[r]);
+      setIsPlaying(true);
+      return;
+    }
 
-    const prevTrack = () => {
-        if (currentIndex === 0) return;
-        const newIndex = currentIndex - 1;
-        setCurrentIndex(newIndex);
-        setTrack(queue[newIndex]);
+    // last song
+    if (currentIndex + 1 >= queue.length) {
+      if (repeat) {
+        setCurrentIndex(0);
+        setTrack(queue[0]);
         setIsPlaying(true);
-    };
+      } else {
+        setIsPlaying(false);
+      }
+      return;
+    }
+
+    const newIndex = currentIndex + 1;
+    setCurrentIndex(newIndex);
+    setTrack(queue[newIndex]);
+    setIsPlaying(true);
+  };
+
+  const prevTrack = () => {
+    if (currentIndex === 0) return;
+
+    const newIndex = currentIndex - 1;
+    setCurrentIndex(newIndex);
+    setTrack(queue[newIndex]);
+    setIsPlaying(true);
+  };
 
 
   const togglePlay = () => {
@@ -62,38 +113,70 @@ export const PlayerProvider = ({ children }) => {
     }
   };
 
-  const onTimeUpdate = () => {
-    if (!audioRef.current) return;
-    setProgress(
-      (audioRef.current.currentTime / audioRef.current.duration) * 100
-    );
+
+  // ---------------- SEEKING ----------------
+  const seek = (input) => {
+    if (!audioRef.current || !duration) return;
+
+    let seconds;
+
+    // Desktop range sends event
+    if (input?.target) {
+      const value = Number(input.target.value);
+      const max = Number(input.target.max || 100);
+
+      // Percent based slider
+      if (max === 100) {
+        seconds = (duration * value) / 100;
+      }
+      // Direct seconds range
+      else {
+        seconds = value;
+      }
+    }
+
+    // Mobile sends number directly
+    else {
+      seconds = Number(input);
+    }
+
+    if (!isFinite(seconds) || isNaN(seconds)) return;
+
+    seconds = Math.max(0, Math.min(duration, seconds));
+
+    audioRef.current.currentTime = seconds;
+    setProgress(seconds);
   };
 
-  const seek = (e) => {
-    if (!audioRef.current) return;
+  // Desktop helper
+  const progressPercent = duration ? (progress / duration) * 100 : 0;
 
-    const percent = e.target.value;
-    audioRef.current.currentTime =
-      (audioRef.current.duration * percent) / 100;
-
-    setProgress(percent);
-  };
 
   return (
     <PlayerContext.Provider
       value={{
         track,
-        isPlaying,
-        progress,
-        playTrack,
-        togglePlay,
-        seek,
         audioRef,
-        onTimeUpdate, 
+
+        isPlaying,
+        togglePlay,
+
+        playTrack,
         nextTrack,
-        prevTrack, 
+        prevTrack,
+        queue,
+        currentIndex,
+
+        progress,
+        duration,
+        seek,
+        progressPercent,
+
         shuffle, setShuffle,
-        repeat, setRepeat
+        repeat, setRepeat,
+
+        isScrubbing,
+        setIsScrubbing
       }}
     >
       {children}

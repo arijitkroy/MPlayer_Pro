@@ -57,11 +57,26 @@ export default function TrackCard({ track, tracks, index }) {
             e.stopPropagation();
             playTrack(tracks, index);
           }}
-          className="absolute bottom-3 right-3 bg-green-500 text-black rounded-full 
-          h-10 w-10 hidden group-hover:flex items-center justify-center 
-          transition-all duration-300 shadow-lg hover:scale-105"
+          className="
+            absolute bottom-3 right-3 bg-green-500 text-black rounded-full 
+            h-10 w-10 flex sm:hidden items-center justify-center
+            transition-all duration-300 shadow-lg hover:scale-105
+            "
         >
           ▶
+        </button>
+        <button
+            onClick={(e) => {
+                e.stopPropagation();
+                playTrack(tracks, index);
+            }}
+            className="
+            absolute bottom-3 right-3 bg-green-500 text-black rounded-full 
+            h-10 w-10 hidden sm:group-hover:flex items-center justify-center
+            transition-all duration-300 shadow-lg hover:scale-105
+            "
+            >
+            ▶
         </button>
 
         {/* Equalizer Animation */}
