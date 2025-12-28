@@ -1,40 +1,108 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
 
-## Getting Started
+# Music Player Pro – Full Stack Spotify‑Style Music Web App 🎵
 
-First, run the development server:
+MPlayer Pro is a fully‑functional modern music streaming web application built using **Next.js (Pages Router)** with **Firebase Authentication**, **Cloud Firestore**, **real‑time playlists**, **favorites**, **Jamendo free music API streaming**, **mobile‑first UI**, and a **Progressive Web App + Trusted Web Activity (TWA) Android app build completed**.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✅ Features Implemented
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+### 🎧 Core Music Features
+- Fetches and streams legal free‑to‑use songs via public API
+- Full Spotify‑like music controls:
+  - Play / Pause
+  - Next / Previous
+  - Shuffle
+  - Repeat
+- Persistent global bottom music player
+- Fullscreen Mobile Player + Seek Bar
+- Smooth scrubbing without glitching
+- Volume control
+- Equalizer animation for currently playing track
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+---
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+### ❤️ Favorites & Library
+- Users can like/unlike songs
+- Favorites persist in Firestore per user
+- Live UI syncs instantly
+- Heart icon turns Green when favorited
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+### 🎼 Playlists System
+- Create playlists
+- Add songs to playlists using modal picker
+- Prevent duplicate songs in the same playlist
+- Playlist detail page with player integration
+- Shareable playlist link that other users can import
+- Real‑time playlist updates
+- Beautiful playlist UI (Desktop + Mobile optimized)
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+### 📱 Mobile UI / PWA / TWA
+Fully designed **Mobile‑first premium UX**
+- Glassmorphism UI
+- Mobile now‑playing screen
+- Mobile seek‑bar support
+- Gesture‑friendly controls
+- PWA Ready
+- **TWA (Trusted Web Activity) Android app successfully completed and working**
+- Compatible for Play Store deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+### 🔐 Authentication
+- Google Authentication using Firebase
+- Global auth session handling
+- Auto user profile management
+- Secure playlist & favorites access
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+### 🏗 Tech Stack
+- Next.js (Pages Router)
+- React + Tailwind CSS + PostCSS
+- Firebase Auth
+- Firebase Firestore
+- Jamendo Music API
+- React Icons
+- React Hot Toast
+- Trusted Web Activity (Android)
+
+---
+
+## 🚀 Deployment
+The project is fully deployed on **Vercel**, with:
+- working Google Authentication
+- working streaming
+- working database features
+- no CORS or popup failures
+- production‑ready UX
+
+---
+
+## 🎯 Status
+This project is **complete and production-ready**, including:
+
+> ✅ Web App Finished  
+> ✅ Streaming Engine Optimized  
+> ✅ Firebase Auth + Firestore Completed  
+> ✅ Full UI & UX Completed  
+> ✅ PWA Ready  
+> ✅ **TWA Android App Built & Successfully Working** 🎉
+
+---
+
+## 👨‍💻 Developer
+Built with ❤️ and a lot of debugging 😎
+
+---
+
+## 📝 License
+Built using free APIs. Ensure you comply with Jamendo usage policy if modifying distribution behavior.
+
+---
+
+Enjoy music streaming 🎶
