@@ -8,6 +8,7 @@ import MobileNav from "../components/MobileNav";
 import MiniPlayer from "../components/MiniPlayer";
 import MobileNowPlaying from "../components/MobileNowPlaying";
 import { useState } from "react";
+import Head from "next/head"
 
 function AuthGate({ children }) {
   const { user, loading } = useAuth();
@@ -38,17 +39,25 @@ function AuthGate({ children }) {
 export default function MyApp({ Component, pageProps }) {
   const [showPlayer, setShowPlayer] = useState(false);
   return (
-    <AuthProvider>
-      <AuthGate>
-        <PlayerProvider>
-          <Component {...pageProps} />
-          <MiniPlayer onExpand={() => setShowPlayer(true)} />
-          <MobileNowPlaying open={showPlayer} onClose={() => setShowPlayer(false)} />
-          <MobileNav />
-          <PlayerBar />
-          <Toaster position="bottom-right" />
-        </PlayerProvider>
-      </AuthGate>
-    </AuthProvider>
+    <>
+      <Head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#000000" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+        <link rel="icon" href="/icons/icon-192x192.png" />
+      </Head>
+      <AuthProvider>
+        <AuthGate>
+          <PlayerProvider>
+            <Component {...pageProps} />
+            <MiniPlayer onExpand={() => setShowPlayer(true)} />
+            <MobileNowPlaying open={showPlayer} onClose={() => setShowPlayer(false)} />
+            <MobileNav />
+            <PlayerBar />
+            <Toaster position="bottom-right" />
+          </PlayerProvider>
+        </AuthGate>
+      </AuthProvider>
+    </>
   );
 }
