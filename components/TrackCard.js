@@ -2,6 +2,7 @@ import { usePlayer } from "../context/PlayerContext";
 import useFavorites from "../hooks/useFavorites";
 import { useState, useEffect } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { FiDownload } from "react-icons/fi";
 import { MdPlaylistAdd } from "react-icons/md";
 import toast from "react-hot-toast";
 import PlaylistModal from "./PlaylistModal";
@@ -41,23 +42,51 @@ export default function TrackCard({ track, tracks, index }) {
     setFavLoading(false);
   };
 
+  const downloadTrack = async (e) => {
+    e.stopPropagation();
+
+    try {
+      toast.loading("Downloading…");
+
+      const res = await fetch(track.audio);
+      const blob = await res.blob();
+
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+
+      a.href = url;
+      a.download = `${track.artist_name} - ${track.name}.mp3`;
+      document.body.appendChild(a);
+      a.click();
+
+      a.remove();
+      window.URL.revokeObjectURL(url);
+
+      toast.dismiss();
+      toast.success("Download complete 🎧");
+    } catch (err) {
+      toast.dismiss();
+      toast.error("Download failed ❌");
+    }
+  };
+
   return (
     <div
       className="relative rounded-xl bg-[#181818]/70 backdrop-blur-md border border-white/10
-      p-4 cursor-pointer transition-all duration-300 group 
+      p-4 transition-all duration-300 group 
       hover:bg-[#222222]/80 hover:shadow-[0_0_40px_rgba(0,0,0,0.6)] hover:scale-[1.02]"
     >
       <div className="relative">
-        <div className="relative w-full h-44">
+        <div className="relative w-full aspect-square">
           <Image
             src={track.album_image || track.image || "/music.png"}
             alt={track.name}
             fill
             placeholder="blur"
             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAA..."
-            className="object-cover rounded"
+            className="object-cover rounded-lg"
             loading="lazy"
-            sizes="(max-width: 768px) 50vw, 25vw"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 200px"
           />
         </div>
 
@@ -80,7 +109,7 @@ export default function TrackCard({ track, tracks, index }) {
                 playTrack(tracks, index);
             }}
             className="
-            absolute bottom-3 right-3 bg-green-500 text-black rounded-full 
+            absolute bottom-3 right-3 bg-green-500 text-black rounded-full cursor-pointer 
             h-10 w-10 hidden sm:group-hover:flex items-center justify-center
             transition-all duration-300 shadow-lg hover:scale-105
             "
@@ -97,18 +126,19 @@ export default function TrackCard({ track, tracks, index }) {
         )}
       </div>
 
-      <div className="mt-3 font-semibold truncate text-white">
-        {track.name}
+      <div className="mt-3 min-w-0">
+        <div className="font-semibold truncate text-white">
+          {track.name}
+        </div>
+        <div className="text-gray-400 text-sm truncate">
+          {track.artist_name}
+        </div>
       </div>
 
-      <div className="text-gray-400 text-sm truncate">
-        {track.artist_name}
-      </div>
-
-        <div className="mt-3 flex justify-between items-center gap-4">
+        <div className="mt-3 flex justify-around items-center gap-4 flex-wrap">
             <button
                 onClick={toggleFavorite}
-                className={`flex items-center gap-2 transition 
+                className={`flex items-center gap-2 transition cursor-pointer 
                 ${favoriteIds.includes(track.id)
                     ? "text-green-400 drop-shadow-[0_0_6px_#22c55e]"
                     : "text-gray-400 hover:text-pink-500"}
@@ -134,14 +164,20 @@ export default function TrackCard({ track, tracks, index }) {
                 e.stopPropagation();
                 setShowPlaylistModal(true);
                 }}
-                className="inline-flex items-center gap-2 whitespace-nowrap 
+                className="inline-flex items-center gap-2 whitespace-nowrap cursor-pointer 
                         text-gray-300 hover:text-green-400 hover:scale-105
                         transition duration-200"
             >
                 <MdPlaylistAdd size={22} className="drop-shadow-sm" />
-                <span className="text-sm">Add to Playlist</span>
             </button>
 
+            <button
+              onClick={downloadTrack}
+              title="Download"
+              className="text-gray-400 hover:text-green-400 transition cursor-pointer"
+            >
+              <FiDownload size={18} />
+            </button>
             </div>
 
         {showPlaylistModal && (

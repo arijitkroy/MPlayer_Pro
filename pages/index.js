@@ -105,7 +105,7 @@ export default function Home() {
       )}
 
       <div
-        className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6
+        className="mt-4 grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))]
         gap-6 pb-10"
       >
         {!loading &&
